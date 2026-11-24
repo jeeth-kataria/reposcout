@@ -71,6 +71,7 @@ class Candidate(ContractModel):
 class RunStats(ContractModel):
     llm_calls: Count = 0
     tool_calls: Count = 0
+    format_repairs: Count = 0
     prompt_tokens: Count = 0
     completion_tokens: Count = 0
     latency_s: float = Field(default=0, ge=0)

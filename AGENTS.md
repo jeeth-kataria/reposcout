@@ -47,7 +47,7 @@ results/<run_name>/    produced by eval runner; committed (small JSON/MD only)
 - Candidate(path, symbol_id|None, score, rationale, citations: list[Span])
 - Localization(instance_id, files: ranked list[str], functions: ranked list[symbol_id],
   candidates, stats: RunStats)
-- RunStats(llm_calls, tool_calls, prompt_tokens, completion_tokens, latency_s, model,
+- RunStats(llm_calls, tool_calls, format_repairs, prompt_tokens, completion_tokens, latency_s, model,
   status: complete|budget_exhausted|error, error)
 - Instance(instance_id, repo, base_commit, problem_statement, gold_files, gold_functions)
 - RepoIndex protocol: symbols(), get_symbol(), callers(), callees(), bm25(), dense(),
@@ -55,7 +55,7 @@ results/<run_name>/    produced by eval runner; committed (small JSON/MD only)
 - Localizer protocol: localize(instance, index, config) -> Localization.
   Every baseline and the agent implement it, so the eval runner treats them identically.
 - ChatClient protocol (OpenAI-compatible): chat(messages, tools, model, max_tokens,
-  timeout) -> ChatResult(message, tool_calls, usage, finish_reason).
+  timeout, *, tool_choice="auto", temperature=0.0, seed=None, extra=None) -> ChatResult(message, tool_calls, usage, finish_reason).
 
 ## Metrics (source of truth: reposcout/eval/metrics.py)
 - file_hit@k: 1 if ANY gold file is in the top-k files.

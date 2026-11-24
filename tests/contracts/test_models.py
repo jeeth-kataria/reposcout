@@ -87,3 +87,11 @@ def test_budgets_and_extra_config_keys() -> None:
     for overrides in ({"max_calls": 1}, {"max_llm_calls": -1}, {"top_k_files": 0}):
         with pytest.raises(ValidationError):
             LocalizerConfig.model_validate(overrides)
+
+
+def test_format_repairs_support_legacy_and_new_predictions() -> None:
+    assert RunStats.model_validate({"status": "complete"}).format_repairs == 0
+    stats = RunStats(status="complete", format_repairs=1)
+    assert RunStats.model_validate_json(stats.model_dump_json()).format_repairs == 1
+    with pytest.raises(ValidationError):
+        RunStats(status="complete", format_repairs=-1)

@@ -1,6 +1,6 @@
-# Hunkestrel
+# RepoScout
 
-Hunkestrel is a Python issue-localization project. Its output contract ranks repository files and functions and cites inclusive line ranges at a specific Git commit. The Python package is named `reposcout`.
+RepoScout is a Python issue-localization project. Its output contract ranks repository files and functions and cites inclusive line ranges at a specific Git commit. The Python package is named `reposcout`.
 
 ## Contract review
 

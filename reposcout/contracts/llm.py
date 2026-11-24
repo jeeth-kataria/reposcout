@@ -1,6 +1,6 @@
 from typing import Literal, Protocol, Self
 
-from pydantic import Field, model_validator
+from pydantic import Field, JsonValue, model_validator
 
 from .models import ContractModel, Count
 from .tools import ToolSpec
@@ -52,4 +52,9 @@ class ChatClient(Protocol):
         model: str,
         max_tokens: int,
         timeout: float,
+        *,
+        tool_choice: Literal["auto", "none", "required"] = "auto",
+        temperature: float = 0.0,
+        seed: int | None = None,
+        extra: dict[str, JsonValue] | None = None,
     ) -> ChatResult: ...
