@@ -16,3 +16,9 @@ uv run pytest
 uv run ruff check
 uv run ruff format --check
 ```
+
+## Benchmark replay
+
+The [production explorer](https://resumeproject-woad.vercel.app) shows saved rankings and links each citation to the source at the evaluated commit. The [leaderboard](results/LEADERBOARD.md) records the split and sample size for each published run.
+
+To build the replay locally, run `node web/build.mjs`. Serve `web/public` with any static HTTP server.
