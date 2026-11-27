@@ -93,3 +93,40 @@ def test_short_caps_and_directory_round_trip(index: RepositoryIndex) -> None:
         result = dispatch(name, json.dumps(args), index, config)
         assert len(result.text) <= 100
         assert result.truncated
+
+
+def test_read_range_rejects_symlink_blob(minirepo_git: GitMinirepo, tmp_path: Path) -> None:
+    import subprocess
+
+    outside = tmp_path / "outside.py"
+    outside.write_text("SECRET_MARKER = True\n")
+    root = minirepo_git.root
+    (root / "postbag/escape.py").symlink_to(outside)
+    subprocess.run(["git", "add", "postbag/escape.py"], cwd=root, check=True)
+    subprocess.run(
+        [
+            "git",
+            "-c",
+            "user.name=Fixture",
+            "-c",
+            "user.email=fixture@example.invalid",
+            "-c",
+            "commit.gpgSign=false",
+            "commit",
+            "-m",
+            "Add fixture symlink",
+        ],
+        cwd=root,
+        capture_output=True,
+        check=True,
+    )
+    index = build_index(root, "HEAD", tmp_path / "cache", dense=False)
+    result = dispatch(
+        "read_range",
+        '{"path":"postbag/escape.py","start_line":1,"end_line":1}',
+        index,
+        LocalizerConfig(),
+    )
+    assert result.error
+    assert not result.citations
+    assert "SECRET_MARKER" not in result.text

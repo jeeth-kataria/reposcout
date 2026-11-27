@@ -126,10 +126,16 @@ class RepositoryIndex:
         # FAISS returns all equal-score rows in index-specific order. Resolve the cutoff ties.
         cutoff = scores[min(k, len(scores)) - 1][1]
         above = [(i, s) for i, s in scores if s >= cutoff]
-        hits = [self._hit(i, s, "dense") for i, s in above]
-        return sorted(
-            hits, key=lambda h: (-h.score, h.span.path, h.span.start_line, h.symbol_id or "")
-        )[:k]
+
+        def rank_key(item: tuple[int, float]) -> tuple[float, str, int, str]:
+            rowid, score = item
+            path, start, symbol = self._db.execute(
+                "select path,start,symbol from units where rowid=?", (rowid,)
+            ).fetchone()
+            return -score, path, start, symbol or ""
+
+        ranked = sorted(above, key=rank_key)[:k]
+        return [self._hit(rowid, score, "dense") for rowid, score in ranked]
 
 
 def build_index(
