@@ -1,3 +1,9 @@
-# Evaluation notes
+# Evaluation decisions and limitations
 
-Workstream A will record its decisions, measured results, and limitations here.
+- Gold files are all changed pre-image paths, including deletions, renames and non-Python sources. New files have no pre-image. Only Python definitions can yield gold functions. An insertion-only hunk anchors each added run to the preceding source line. At the start of an empty file, there is no anchor. Decorators inherit their definition's span.
+- File hits, all-file coverage and function recall use unique predictions in original rank order. Empty gold sets have zero file-hit and vacuous all-file coverage. Function recall omits empty function sets. The raw aggregate uses fractions; the Markdown report converts error rate to percent.
+- Setup failures with unavailable labels are excluded from ranking metrics and included in error/cost rates. Error predictions with available gold labels are scored like every other prediction. Use `instances`, `scored_instances`, `unavailable_gold` and `no_gold_functions` to inspect denominators.
+- Each worker starts a new process group, so the per-instance deadline applies even to a blocking Git or model call. Terminal predictions, including errors, are checkpointed. A new run name gives an independent retry. Explicit request pacing applies across workers using a POSIX file lock. A timeout can lose unreported provider usage. Localizer latency excludes cold checkout and indexing on successful runs.
+- Gold counts for the **first 50 test rows in dataset order**, from pinned Git pre-images: 50 gold files (1.00 per issue), 49 gold functions (0.98 per issue), and 7 issues without gold functions (14%). These statistics describe that subset.
+- Gold counts for the **full dev split**, from all 23 pinned Git pre-images: 23 gold files (1.00 per issue), 22 gold functions (0.96 per issue), and 2 issues without gold functions (8.70%).
+- Full-split estimates omit failed pilot predictions when extrapolating use and report how many failed. If every pilot prediction fails, the estimate is unavailable and the remaining run is held.
