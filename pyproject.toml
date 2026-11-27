@@ -5,6 +5,8 @@ description = "RepoScout localizes Python issues to files and functions with sou
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "langgraph==1.0.5",
+    "openai==1.99.9",
     "pydantic==2.14.2",
     "tree-sitter==0.25.2",
     "tree-sitter-python==0.25.0",
