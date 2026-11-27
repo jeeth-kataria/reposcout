@@ -33,7 +33,7 @@ for (const entry of await readdir(results, {withFileTypes: true})) {
   });
   const filename = encodeURIComponent(entry.name) + ".json";
   await writeFile(path.join(output, filename), JSON.stringify(cases));
-  runs.push({name: entry.name, localizer: config.localizer, split: config.split, model: config.model,
+  runs.push({name: entry.name, localizer: config.localizer, split: config.split, model: config.model ?? config.embedding_model ?? null,
     count: metrics.instances, metrics, file: filename});
 }
 if (!runs.length) throw Error("A completed recorded run is required.");

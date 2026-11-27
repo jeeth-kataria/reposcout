@@ -78,6 +78,7 @@ function showIssue() {
 async function showRun() {
   const id = ++request, run = runs[select.selectedIndex];
   const metrics = document.querySelector("#metrics");
+  document.querySelector("#run-model").textContent = run.model || run.localizer;
   const pct = n => n === null ? "—" : (100*n).toFixed(1).replace(/\.0$/,"") + "%";
   metrics.replaceChildren(metric(run.count, run.split + " instances"), metric(pct(run.metrics["file_hit@5"]),"File hit @ 5"),
     metric(pct(run.metrics["func_recall@5"]),"Function recall @ 5"), metric(run.metrics.mean_tokens,"Mean tokens"));
