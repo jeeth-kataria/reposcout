@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RepoScout · Benchmark explorer</title><meta name="description" content="Replay measured SWE-bench Lite localization runs and inspect source citations at the evaluated Git commit.">
+<link rel="stylesheet" href="/styles.css"><script type="module" src="/app.js"></script></head>
+<body><header><div class="bar"><a class="brand" href="/"><i aria-hidden="true"></i> RepoScout</a>
+<a href="https://github.com/jeeth-kataria/reposcout">GitHub repository ↗</a></div></header>
+<main><div class="intro"><div><h1>Benchmark explorer</h1><p>Replay a Python issue against the files and functions RepoScout ranked.</p></div>
+<label>Recorded run<select id="runs"></select></label></div>
+<section aria-label="Run measurements" id="metrics" class="metrics"></section>
+<div class="workspace"><aside><div class="section-label">SWE-bench Lite</div><h2>Issues</h2><label class="find">Filter issues<input type="search" id="filter" placeholder="Repository or issue number"></label><ul id="issues"></ul></aside>
+<article id="case" aria-live="polite"><p>Loading recorded runs…</p></article></div></main>
+<footer><span>RepoScout</span><a href="https://huggingface.co/datasets/princeton-nlp/SWE-bench_Lite">SWE-bench Lite dataset ↗</a></footer></body></html>

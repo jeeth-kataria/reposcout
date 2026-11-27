@@ -14,3 +14,5 @@ traces/
 dist/
 build/
 .DS_Store
+web/public/
+.vercel

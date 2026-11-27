@@ -1,0 +1,27 @@
+{
+  "dataset": "princeton-nlp/SWE-bench_Lite",
+  "split": "dev",
+  "localizer": "bm25",
+  "config": {
+    "max_llm_calls": 12,
+    "max_tool_calls": 20,
+    "max_explore_rounds": 2,
+    "max_output_tokens": 2048,
+    "timeout_s": 1800.0,
+    "top_k_files": 10,
+    "top_k_functions": 10,
+    "use_dense": false,
+    "use_graph_tools": true,
+    "use_verifier": true
+  },
+  "instance_ids": [
+    "sqlfluff__sqlfluff-1625"
+  ],
+  "rows_sha256": "9691797c4ce903b02264979a42457fbf1878b2d51c88364ba5f9bb862b939c50",
+  "embedding_model": null,
+  "workers": 1,
+  "max_total_tokens": null,
+  "request_interval": 0,
+  "input_usd_per_million": 0,
+  "output_usd_per_million": 0
+}
