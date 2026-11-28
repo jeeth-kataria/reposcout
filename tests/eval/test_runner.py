@@ -140,3 +140,24 @@ def test_failed_pilot_marks_estimate_unavailable(
     assert metrics["instances"] == 5
     estimate = json.loads((tmp_path / "results/bad-pilot/estimate.json").read_text())
     assert estimate["status"] == "unavailable" and estimate["pilot_errors"] == 5
+
+
+def test_worker_transport_preserves_agent_configuration(tmp_path: Path) -> None:
+    from reposcout.agent.state import AgentConfig
+    from reposcout.eval.dataset import DatasetRow
+
+    cfg = AgentConfig(seed=53, explore_limit=3)
+    job = runner.Job(
+        row=DatasetRow(
+            instance_id="one",
+            repo="org/repo",
+            base_commit="a" * 40,
+            problem_statement="issue",
+            patch="",
+        ),
+        localizer="agent",
+        cache=tmp_path,
+        out=tmp_path,
+        config=cfg,
+    )
+    assert runner.Job.model_validate_json(job.model_dump_json()).config == cfg

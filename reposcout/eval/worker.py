@@ -6,7 +6,7 @@ from importlib.util import find_spec
 from pathlib import Path
 from time import perf_counter
 
-from pydantic import BaseModel
+from pydantic import BaseModel, SerializeAsAny, ValidationInfo, field_validator
 
 from reposcout import baselines  # noqa: F401 (register built-in factories)
 from reposcout.contracts.localizer import LocalizerConfig
@@ -23,8 +23,17 @@ class Job(BaseModel):
     localizer: str
     cache: Path
     out: Path
-    config: LocalizerConfig
+    config: SerializeAsAny[LocalizerConfig]
     clean_worktrees: bool = False
+
+    @field_validator("config", mode="before")
+    @classmethod
+    def restore_agent_config(cls, value: object, info: ValidationInfo) -> object:
+        if isinstance(value, dict) and info.data.get("localizer", "").startswith("agent"):
+            from reposcout.agent.state import AgentConfig
+
+            return AgentConfig.model_validate(value)
+        return value
 
 
 def failure(instance_id: str, error: str, elapsed: float) -> Localization:
